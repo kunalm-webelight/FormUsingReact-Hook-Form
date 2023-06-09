@@ -9,6 +9,9 @@
 *-------------------------------------------------------------------*/
 
 export function findInputError(errors, name) {
+  console.log("errors->",errors);
+  console.log("name->",name);
+
   const filtered = Object.keys(errors)
     .filter(key => key.includes(name))
     .reduce((cur, key) => {

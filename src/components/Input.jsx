@@ -8,11 +8,11 @@
 
 import cn from 'classnames'
 import { findInputError, isFormInvalid } from '../utils'
-import {   } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MdError } from 'react-icons/md'
 
-export const Input = ({ label, type, id, placeholder }) => {
+export const Input = ({ label, type, id, placeholder, validation, name, multiline, className }) => {
   const { 
     register,
     formState:{errors},
@@ -20,9 +20,12 @@ export const Input = ({ label, type, id, placeholder }) => {
 
     const inputError = findInputError(errors,label)
     const isInvalid  = isFormInvalid(inputError)
-    console.log(isInvalid,inputError);
+    // console.log(isInvalid,"111111111111111",inputError);
+
+    const input_tailwind = 'p-5 font-medium rounded-md w-full border border-slate-300 placeholder:opacity-60'
+
   return (
-    <div className="flex flex-col w-full gap-2">
+    <div className={cn('flex flex-col w-full gap-2',className)}>
       <div className="flex justify-between">
         <label htmlFor={id} className="font-semibold capitalize">
           {label}
@@ -36,19 +39,25 @@ export const Input = ({ label, type, id, placeholder }) => {
           )}
         </AnimatePresence>
       </div>
-      <input
+      {multiline ? (
+        <textarea
         id={id}
         type={type}
-        className="w-full p-5 font-medium border rounded-md border-slate-300 placeholder:opacity-60"
+        className={cn(input_tailwind, 'min-h-[10rem] max-h-[20rem] resize-y')}
         placeholder={placeholder}
-        {...register(label, {
-          required: {
-            value: true,
-            message: 'required',
-          },
-        })}
-      />
-    </div>
+        {...register(`${name}`, validation)}
+        >
+      </textarea>
+      ):(
+        <input
+        id={id}
+        type={type}
+        className={cn(input_tailwind)}
+        placeholder={placeholder}
+        {...register(name,validation)} //from label, { required: { value: true, message: 'required',},}
+      />  
+      )}
+      </div>
   )
 }
 
@@ -71,3 +80,4 @@ const framer_error = {
   exit: { opacity: 0, y: 10 },
   transition: { duration: 0.2 },
 }
+

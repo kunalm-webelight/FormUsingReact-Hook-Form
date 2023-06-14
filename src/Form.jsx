@@ -18,6 +18,7 @@ import {
 import { useState } from 'react'
 import { GrMail } from 'react-icons/gr'
 import { BsFillCheckSquareFill } from 'react-icons/bs'
+import axios from 'axios'
 
 export const Form = () => {
   const methods = useForm()
@@ -25,6 +26,7 @@ export const Form = () => {
   //use form gives methods
   const onSubmit = methods.handleSubmit(data => {
     console.log(data);
+    fetchinuse();
     methods.reset();
     setSuccess(true);
   }) //accessing handlesubmit from methods and writing custom method to handle it
@@ -63,7 +65,23 @@ export const Form = () => {
   //     },
   //   },
   // }
-
+  // using fetch========================
+  async function fetchinuse(){
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+      console.log(response);
+      const jsonData = await response.json();
+      console.log(jsonData);
+  };
+  // using axios
+  function axiosinuse(){
+    axios.get('https://jsonplaceholder.typicode.com/posts/1')
+    .then((response)=>{
+      console.log("response->",response.data);
+    },(err)=>{
+      console.log("err->",err);
+    })
+  }
+  
   return (
     <FormProvider {...methods}>
       {/* passed all methods to formprovider as props*/}
@@ -81,8 +99,9 @@ export const Form = () => {
               <BsFillCheckSquareFill/> Form has been submitted successfully
             </p>
           )}
+          {/* <p>{printthis}</p> */}
           <button
-            onClick={onSubmit}
+            onClick={axiosinuse}
             className="flex items-center gap-1 p-5 font-semi text-white bg-blue-600 rounded-md hover:bg-blue-800"
           >
             <GrMail />
